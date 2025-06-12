@@ -22,6 +22,12 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+// ✅ NUEVA FUNCIÓN para limpiar formato de coordenadas
+function limpiarCoordenada(valor) {
+  const numero = parseFloat(String(valor).replace(/[^\d.-]/g, ''));
+  return Number(numero.toFixed(8));
+}
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (!navigator.geolocation) {
@@ -33,8 +39,8 @@ form.addEventListener("submit", function (e) {
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      const lat = Number(position.coords.latitude).toFixed(8);
-      const lon = Number(position.coords.longitude).toFixed(8);
+      const lat = limpiarCoordenada(position.coords.latitude);
+      const lon = limpiarCoordenada(position.coords.longitude);
       const selectedObra = form.obra.value;
       const refObra = coordenadasObras[selectedObra];
       const distancia = calcularDistancia(lat, lon, refObra.lat, refObra.lon);
@@ -63,7 +69,7 @@ form.addEventListener("submit", function (e) {
         body: data
       })
       .then(() => {
-        estado.textContent = "Ubicación enviada. Espera confirmación posterior.";
+        estado.textContent = `Ubicación enviada. Distancia: ${distancia.toFixed(1)} m`;
         form.reset();
       })
       .catch((error) => {
