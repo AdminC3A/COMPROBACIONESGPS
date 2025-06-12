@@ -22,6 +22,20 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
+function debeOcultar() {
+  const control = document.getElementById("ocultarTexto");
+  return control && control.value.trim().toUpperCase() === "SI";
+}
+
+function copiarUbicacion() {
+  const texto = document.getElementById("datosUbicacion")?.innerText;
+  if (texto) {
+    navigator.clipboard.writeText(texto)
+      .then(() => alert("Ubicación copiada al portapapeles"))
+      .catch(err => console.error("Error al copiar:", err));
+  }
+}
+
 form.addEventListener("submit", function (e) {
   e.preventDefault();
   if (!navigator.geolocation) {
@@ -63,7 +77,17 @@ form.addEventListener("submit", function (e) {
         body: data
       })
       .then(() => {
-        estado.textContent = "Ubicación enviada. Espera confirmación posterior.";
+        const colorTexto = debeOcultar() ? "#f7f7f7" : "black";
+        estado.innerHTML = `
+          <div id="datosUbicacion" style="color: ${colorTexto};">
+            <b>Ubicación enviada:</b><br>
+            Latitud: ${lat}<br>
+            Longitud: ${lon}<br>
+            Distancia a la obra: ${distancia.toFixed(1)} m<br>
+            En obra: ${enObra}
+          </div>
+          <button onclick="copiarUbicacion()">Copiar</button>
+        `;
         form.reset();
       })
       .catch((error) => {
