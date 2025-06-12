@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Ubicación - ChambaClic</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #estado {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+    }
+
+    .logo {
+      width: 160px;
+      margin-bottom: 10px;
+      border: 2px solid #ccc;
+      border-radius: 12px;
+      padding: 5px;
+      background-color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://raw.githubusercontent.com/AdminC3A/COMPROBACIONESGPS/main/images/LOGO%20ELE.jpg" alt="Logo ELE" class="logo" />
+  <h2>Registro de llegada a obra</h2>
+  <form id="ubicacionForm">
+    <input type="hidden" id="token" name="token" />
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" required><br>
+
+    <label for="motivo">Motivo:</label>
+    <input type="text" id="motivo" name="motivo" required><br>
+
+    <label for="obra">Selecciona la obra:</label>
+    <select id="obra" name="obra" required>
+      <option value="">--Selecciona una obra--</option>
+      <option value="obra1">Obra 1 - Quivira - Casa Tres Aguas</option>
+      <option value="obra2">Obra 2 - Cabo Real</option>
+      <option value="obra3">Obra 3 - Chileno Lote 23</option>
+      <option value="oficina">Oficina Central</option>
+    </select><br>
+
+    <button type="submit">Enviar ubicación</button>
+  </form>
+
+  <p id="estado"></p>
+
+  <script>
+    const form = document.getElementById("ubicacionForm");
+    const estado = document.getElementById("estado");
+
+    // Extraer token desde URL y ponerlo en el campo oculto
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token") || "sin-token";
+    document.getElementById("token").value = token;
+
+    const coordenadasObras = {
+      obra1: { nombre: "Obra 1 - Quivira - Casa Tres Aguas", lat: 22.874979, lon: -109.961205 },
+      obra2: { nombre: "Obra 2 - Cabo Real", lat: 22.9903641, lon: -109.7694588 },
+      obra3: { nombre: "Obra 3 - Chileno Lote 23", lat: 22.945385, lon: -109.8167839 },
+      oficina: { nombre: "Oficina Central", lat: 23.0634537, lon: -109.7004738 }
+    };
+
+    function calcularDistancia(lat1, lon1, lat2, lon2) {
+      const R = 6371000;
+      const rad = Math.PI / 180;
+      const dLat = (lat2 - lat1) * rad;
+      const dLon = (lon2 - lon1) * rad;
+      const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return R * c;
+    }
+
+    window.addEventListener("load", () => {
+      const tipoRed = navigator.connection ? navigator.connection.effectiveType : "desconocido";
+      fetch("https://script.google.com/macros/s/AKfycbyYoI2ILMpdONZRdEtdR3REHvpAmVcpjntjuOmMjwYb6rphZb92QQFp-SQhVX_U9zGK/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fecha: new Date().toLocaleString(),
+          mensaje: "Página abierta",
+          tipoRed: tipoRed,
+          token: token
+        }),
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!navigator.geolocation) {
+        estado.textContent = "La geolocalización no está soportada por tu navegador.";
+        return;
+      }
+
+      estado.textContent = "Obteniendo ubicación...";
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          const selectedObra = form.obra.value;
+          const refObra = coordenadasObras[selectedObra];
+
+          const distancia = calcularDistancia(lat, lon, refObra.lat, refObra.lon);
+          const enObra = distancia <= 100 ? "✅ Sí" : "❌ No";
+          const tipoRed = navigator.connection ? navigator.connection.effectiveType : "desconocido";
+
+          const data = {
+            token: token,
+            nombre: form.nombre.value,
+            motivo: form.motivo.value,
+            obra: refObra.nombre,
+            lat: lat,
+            lon: lon,
+            fecha: new Date().toLocaleString(),
+            distancia: distancia.toFixed(1),
+            enObra: enObra,
+            tipoRed: tipoRed,
+            userAgent: navigator.userAgent
+          };
+
+          fetch("https://tu-api-backend.com/registro", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (response.ok) {
+                estado.textContent = "Ubicación registrada correctamente.";
+                form.reset();
+              } else {
+                estado.textContent = "No se pudo registrar la ubicación (error en servidor).";
+              }
+            })
+            .catch((error) => {
+              estado.textContent = "Error al enviar los datos.";
+              console.error("Error en fetch:", error);
+            });
+        },
+        (error) => {
+          if (error.code === error.PERMISSION_DENIED) {
+            estado.textContent = "Debes permitir el acceso a la ubicación para continuar.";
+          } else {
+            estado.textContent = "No se pudo obtener la ubicación.";
+          }
+        }
+      );
+    });
+  </script>
+</body>
+</html>
