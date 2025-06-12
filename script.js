@@ -46,8 +46,8 @@ form.addEventListener("submit", function (e) {
       data.append("nombre", form.nombre.value);
       data.append("motivo", form.motivo.value);
       data.append("obra", refObra.nombre);
-      data.append("lat", lat);
-      data.append("lon", lon);
+      data.append("lat", lat.toFixed(8));
+      data.append("lon", lon.toFixed(8));
       data.append("fecha", new Date().toLocaleString());
       data.append("distancia", distancia.toFixed(1));
       data.append("enObra", enObra);
