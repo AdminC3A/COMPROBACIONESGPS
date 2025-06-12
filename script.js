@@ -2,6 +2,7 @@ const form = document.getElementById("ubicacionForm");
 const estado = document.getElementById("estado");
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token") || "sin-token";
+const ocultarDatos = false; // cambia a true si quieres ocultar texto al usuario
 document.getElementById("token").value = token;
 
 const coordenadasObras = {
