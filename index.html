@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de día de trabajo - ELEMENTO ARQUITECTURA INTERIOR</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Registro de llegada a obra - ELEMENTO</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <img src="https://raw.githubusercontent.com/AdminC3A/COMPROBACIONESGPS/main/images/LOGO%20ELE.jpg" alt="Logo ELE" class="logo" />
   <h2>Registro de llegada a obra</h2>
-  
+
   <form id="ubicacionForm">
     <input type="hidden" id="token" name="token" />
     
     <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required><br>
+    <input type="text" id="nombre" name="nombre" required /><br />
     
     <label for="motivo">Motivo:</label>
-    <input type="text" id="motivo" name="motivo" required><br>
+    <input type="text" id="motivo" name="motivo" required /><br />
     
     <label for="obra">Selecciona la obra:</label>
     <select id="obra" name="obra" required>
@@ -26,9 +26,9 @@
       <option value="obra2">Obra 2 - Cabo Real</option>
       <option value="obra3">Obra 3 - Chileno Lote 23</option>
       <option value="oficina">Oficina Central</option>
-    </select><br>
+    </select><br />
 
-   <button type="submit">Enviar ubicación</button>
+    <button type="submit">Enviar ubicación</button>
   </form>
 
   <div id="estado"></div>
