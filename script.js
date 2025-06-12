@@ -78,7 +78,7 @@ form.addEventListener("submit", function (e) {
         body: data
       })
       .then(() => {
-        const colorTexto = debeOcultar() ? "#f7f7f7" : "black";
+        const colorTexto = ocultarDatos ? "#f7f7f7" : "black";
         estado.innerHTML = `
           <div id="datosUbicacion" style="color: ${colorTexto};">
             <b>Ubicación enviada:</b><br>
