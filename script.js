@@ -1,10 +1,9 @@
 const form = document.getElementById("ubicacionForm");
 const estado = document.getElementById("estado");
+const reenviarBtn = document.getElementById("reenviarBtn");
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token") || "sin-token";
 document.getElementById("token").value = token;
-
-const ocultarDatos = true; // cambia a false para mostrar el texto
 
 const coordenadasObras = {
   obra1: { nombre: "Obra 1 - Quivira - Casa Tres Aguas", lat: 22.874979, lon: -109.961205 },
@@ -22,28 +21,6 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
             Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
-}
-
-function reenviarCoordenadasCorregidas(lat, lon, refObra, distancia, enObra, tipoRed) {
-  const dataFix = new URLSearchParams();
-  dataFix.append("token", "corregido");
-  dataFix.append("nombre", "Corrección");
-  dataFix.append("motivo", "Ajuste GPS");
-  dataFix.append("obra", refObra.nombre);
-  dataFix.append("lat", lat.toString());
-  dataFix.append("lon", lon.toString());
-  dataFix.append("fecha", new Date().toLocaleString());
-  dataFix.append("distancia", distancia.toFixed(1));
-  dataFix.append("enObra", enObra);
-  dataFix.append("tipoRed", tipoRed);
-  dataFix.append("userAgent", navigator.userAgent);
-
-  fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: dataFix
-  });
 }
 
 form.addEventListener("submit", function (e) {
@@ -70,8 +47,8 @@ form.addEventListener("submit", function (e) {
       data.append("nombre", form.nombre.value);
       data.append("motivo", form.motivo.value);
       data.append("obra", refObra.nombre);
-      data.append("lat", lat.toString());
-      data.append("lon", lon.toString());
+      data.append("lat", lat);
+      data.append("lon", lon);
       data.append("fecha", new Date().toLocaleString());
       data.append("distancia", distancia.toFixed(1));
       data.append("enObra", enObra);
@@ -81,13 +58,17 @@ form.addEventListener("submit", function (e) {
       fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
         body: data
       })
       .then(() => {
-        const colorTexto = ocultarDatos ? "#f7f7f7" : "black";
+        form.querySelector("button[type='submit']").disabled = true;
+        reenviarBtn.style.display = "inline-block";
+
         estado.innerHTML = `
-          <div id="datosUbicacion" style="color: ${colorTexto};">
+          <div id="datosUbicacion" style="color: black; user-select: text;">
             <b>Ubicación enviada:</b><br>
             Latitud: ${lat}<br>
             Longitud: ${lon}<br>
@@ -95,8 +76,6 @@ form.addEventListener("submit", function (e) {
             En obra: ${enObra}
           </div>
         `;
-        reenviarCoordenadasCorregidas(lat, lon, refObra, distancia, enObra, tipoRed);
-        form.reset();
       })
       .catch((error) => {
         estado.textContent = "Error al enviar los datos.";
@@ -104,7 +83,19 @@ form.addEventListener("submit", function (e) {
       });
     },
     (error) => {
-      estado.textContent = "No se pudo obtener la ubicación.";
+      if (error.code === error.PERMISSION_DENIED) {
+        estado.textContent = "Debes permitir el acceso a la ubicación para continuar.";
+      } else {
+        estado.textContent = "No se pudo obtener la ubicación.";
+      }
     }
   );
+});
+
+reenviarBtn.addEventListener("click", () => {
+  estado.innerHTML = "";
+  form.style.display = "block";
+  form.querySelector("button[type='submit']").disabled = false;
+  reenviarBtn.style.display = "none";
+  form.reset();
 });
