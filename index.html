@@ -2,23 +2,23 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registro de día de trabajo - ELEMENTO ARQUITECTURA INTERIOR</title>
-  <meta property="og:title" content="Registro de llegada - Elemento Arquitectura Interior">
-  <meta property="og:description" content="Verifica tu ubicación de obra desde tu celular sin depender de WhatsApp.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://elemento-salidas-a-obras.netlify.app/">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <img src="https://raw.githubusercontent.com/AdminC3A/COMPROBACIONESGPS/main/images/LOGO%20ELE.jpg" alt="Logo ELE" class="logo" />
   <h2>Registro de llegada a obra</h2>
+  
   <form id="ubicacionForm">
     <input type="hidden" id="token" name="token" />
+    
     <label for="nombre">Nombre:</label>
     <input type="text" id="nombre" name="nombre" required><br>
+    
     <label for="motivo">Motivo:</label>
     <input type="text" id="motivo" name="motivo" required><br>
+    
     <label for="obra">Selecciona la obra:</label>
     <select id="obra" name="obra" required>
       <option value="">--Selecciona una obra--</option>
@@ -27,9 +27,15 @@
       <option value="obra3">Obra 3 - Chileno Lote 23</option>
       <option value="oficina">Oficina Central</option>
     </select><br>
+
+    <label for="ocultarTexto">Ocultar datos en pantalla (escribe SI o NO):</label>
+    <input type="text" id="ocultarTexto" value="NO" placeholder="SI o NO"><br>
+
     <button type="submit">Enviar ubicación</button>
   </form>
-  <p id="estado"></p>
+
+  <div id="estado"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
