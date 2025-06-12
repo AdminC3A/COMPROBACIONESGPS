@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registro de dia de trabajo - ELEMENTO ARQUITECTURA INTERIOR</title>
+  <meta property="og:title" content="Registro de llegada - Elemento Arquitectura Interior">
+  <meta property="og:description" content="Verifica tu ubicación de obra desde tu celular sin depender de WhatsApp.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://elemento-salidas-a-obras.netlify.app/">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -104,7 +108,6 @@
     const form = document.getElementById("ubicacionForm");
     const estado = document.getElementById("estado");
 
-    // Extraer token desde URL y ponerlo en el campo oculto
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token") || "sin-token";
     document.getElementById("token").value = token;
@@ -177,7 +180,7 @@
             userAgent: navigator.userAgent
           };
 
-          fetch("https://tu-api-backend.com/registro", {
+          fetch("https://script.google.com/macros/s/AKfycbyYoI2ILMpdONZRdEtdR3REHvpAmVcpjntjuOmMjwYb6rphZb92QQFp-SQhVX_U9zGK/exec", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
