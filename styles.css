@@ -1,14 +1,26 @@
 body {
   font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: 100vh;
+  padding: 30px;
   margin: 0;
-  background-color: #f4f4f4;
 }
-h2 { margin-bottom: 20px; }
+
+.logo {
+  width: 160px;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 5px;
+  background-color: #fff;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
 form {
   background: white;
   padding: 20px;
@@ -16,11 +28,13 @@ form {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 300px;
 }
+
 label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
+
 input, select {
   width: 100%;
   padding: 8px;
@@ -29,6 +43,7 @@ input, select {
   border-radius: 8px;
   box-sizing: border-box;
 }
+
 button {
   width: 100%;
   padding: 10px;
@@ -38,19 +53,16 @@ button {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
+  margin-top: 10px;
 }
-button:hover { background-color: #0056b3; }
+
+button:hover {
+  background-color: #0056b3;
+}
+
 #estado {
   margin-top: 15px;
   font-size: 14px;
-  color: #333;
   text-align: center;
 }
-.logo {
-  width: 160px;
-  margin-bottom: 10px;
-  border: 2px solid #ccc;
-  border-radius: 12px;
-  padding: 5px;
-  background-color: #fff;
-}
+
