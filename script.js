@@ -41,6 +41,7 @@ form.addEventListener("submit", function (e) {
     (position) => {
       const lat = limpiarCoordenada(position.coords.latitude);
       const lon = limpiarCoordenada(position.coords.longitude);
+      estado.textContent = `LAT: ${lat}, LON: ${lon}`;
       const selectedObra = form.obra.value;
       const refObra = coordenadasObras[selectedObra];
       const distancia = calcularDistancia(lat, lon, refObra.lat, refObra.lon);
