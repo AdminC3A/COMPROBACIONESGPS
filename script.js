@@ -54,7 +54,7 @@ form.addEventListener("submit", function (e) {
       data.append("tipoRed", tipoRed);
       data.append("userAgent", navigator.userAgent);
 
-      fetch("https://script.google.com/macros/s/AKfycbyYoI2ILMpdONZRdEtdR3REHvpAmVcpjntjuOmMjwYb6rphZb92QQFp-SQhVX_U9zGK/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
