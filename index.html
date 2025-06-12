@@ -2,36 +2,29 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro de llegada a obra - ELEMENTO</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro GPS en Obra</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <img src="https://raw.githubusercontent.com/AdminC3A/COMPROBACIONESGPS/main/images/LOGO%20ELE.jpg" alt="Logo ELE" class="logo" />
-  <h2>Registro de llegada a obra</h2>
-
+  <h1>Registro de llegada a obra</h1>
   <form id="ubicacionForm">
     <input type="hidden" id="token" name="token" />
-    
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" required /><br />
-    
-    <label for="motivo">Motivo:</label>
-    <input type="text" id="motivo" name="motivo" required /><br />
-    
-    <label for="obra">Selecciona la obra:</label>
-    <select id="obra" name="obra" required>
-      <option value="">--Selecciona una obra--</option>
-      <option value="obra1">Obra 1 - Quivira - Casa Tres Aguas</option>
-      <option value="obra2">Obra 2 - Cabo Real</option>
-      <option value="obra3">Obra 3 - Chileno Lote 23</option>
-      <option value="oficina">Oficina Central</option>
-    </select><br />
-
+    <label>Nombre:<br><input type="text" name="nombre" required /></label><br>
+    <label>Motivo:<br><input type="text" name="motivo" required /></label><br>
+    <label>Selecciona la obra:<br>
+      <select name="obra" required>
+        <option value="obra1">Quivira - Casa Tres Aguas</option>
+        <option value="obra2">Cabo Real</option>
+        <option value="obra3">Chileno Lote 23</option>
+        <option value="oficina">Oficina Central</option>
+      </select>
+    </label><br>
     <button type="submit">Enviar ubicación</button>
   </form>
 
   <div id="estado"></div>
+  <button id="reenviarBtn" style="display:none; margin-top:10px;">¿Volver a enviar?</button>
 
   <script src="script.js"></script>
 </body>
