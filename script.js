@@ -33,8 +33,8 @@ form.addEventListener("submit", function (e) {
 
   navigator.geolocation.getCurrentPosition(
     (position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
+      const lat = Number(position.coords.latitude).toFixed(8);
+      const lon = Number(position.coords.longitude).toFixed(8);
       const selectedObra = form.obra.value;
       const refObra = coordenadasObras[selectedObra];
       const distancia = calcularDistancia(lat, lon, refObra.lat, refObra.lon);
@@ -46,8 +46,8 @@ form.addEventListener("submit", function (e) {
       data.append("nombre", form.nombre.value);
       data.append("motivo", form.motivo.value);
       data.append("obra", refObra.nombre);
-      data.append("lat", lat.toFixed(8));
-      data.append("lon", lon.toFixed(8));
+      data.append("lat", lat);
+      data.append("lon", lon);
       data.append("fecha", new Date().toLocaleString());
       data.append("distancia", distancia.toFixed(1));
       data.append("enObra", enObra);
