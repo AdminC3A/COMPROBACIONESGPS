@@ -1,6 +1,5 @@
 const form = document.getElementById("ubicacionForm");
 const estado = document.getElementById("estado");
-
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token") || "sin-token";
 document.getElementById("token").value = token;
@@ -17,7 +16,8 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
   const rad = Math.PI / 180;
   const dLat = (lat2 - lat1) * rad;
   const dLon = (lon2 - lon1) * rad;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+  const a = Math.sin(dLat / 2) ** 2 +
+            Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -37,7 +37,6 @@ form.addEventListener("submit", function (e) {
       const lon = position.coords.longitude;
       const selectedObra = form.obra.value;
       const refObra = coordenadasObras[selectedObra];
-
       const distancia = calcularDistancia(lat, lon, refObra.lat, refObra.lon);
       const enObra = distancia <= 100 ? "✅ Sí" : "❌ No";
       const tipoRed = navigator.connection ? navigator.connection.effectiveType : "desconocido";
@@ -58,7 +57,9 @@ form.addEventListener("submit", function (e) {
       fetch("https://script.google.com/macros/s/AKfycbyYoI2ILMpdONZRdEtdR3REHvpAmVcpjntjuOmMjwYb6rphZb92QQFp-SQhVX_U9zGK/exec", {
         method: "POST",
         mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
         body: data
       })
       .then(() => {
