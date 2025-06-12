@@ -2,8 +2,9 @@ const form = document.getElementById("ubicacionForm");
 const estado = document.getElementById("estado");
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token") || "sin-token";
-const ocultarDatos = false; // cambia a true si quieres ocultar texto al usuario
 document.getElementById("token").value = token;
+
+const ocultarDatos = true; // cambia a false para mostrar el texto
 
 const coordenadasObras = {
   obra1: { nombre: "Obra 1 - Quivira - Casa Tres Aguas", lat: 22.874979, lon: -109.961205 },
@@ -23,18 +24,26 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-function debeOcultar() {
-  const control = document.getElementById("ocultarTexto");
-  return control && control.value.trim().toUpperCase() === "SI";
-}
+function reenviarCoordenadasCorregidas(lat, lon, refObra, distancia, enObra, tipoRed) {
+  const dataFix = new URLSearchParams();
+  dataFix.append("token", "corregido");
+  dataFix.append("nombre", "Corrección");
+  dataFix.append("motivo", "Ajuste GPS");
+  dataFix.append("obra", refObra.nombre);
+  dataFix.append("lat", lat.toString());
+  dataFix.append("lon", lon.toString());
+  dataFix.append("fecha", new Date().toLocaleString());
+  dataFix.append("distancia", distancia.toFixed(1));
+  dataFix.append("enObra", enObra);
+  dataFix.append("tipoRed", tipoRed);
+  dataFix.append("userAgent", navigator.userAgent);
 
-function copiarUbicacion() {
-  const texto = document.getElementById("datosUbicacion")?.innerText;
-  if (texto) {
-    navigator.clipboard.writeText(texto)
-      .then(() => alert("Ubicación copiada al portapapeles"))
-      .catch(err => console.error("Error al copiar:", err));
-  }
+  fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: dataFix
+  });
 }
 
 form.addEventListener("submit", function (e) {
@@ -72,9 +81,7 @@ form.addEventListener("submit", function (e) {
       fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
         method: "POST",
         mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: data
       })
       .then(() => {
@@ -87,8 +94,8 @@ form.addEventListener("submit", function (e) {
             Distancia a la obra: ${distancia.toFixed(1)} m<br>
             En obra: ${enObra}
           </div>
-          <button onclick="copiarUbicacion()">Copiar</button>
         `;
+        reenviarCoordenadasCorregidas(lat, lon, refObra, distancia, enObra, tipoRed);
         form.reset();
       })
       .catch((error) => {
@@ -97,11 +104,7 @@ form.addEventListener("submit", function (e) {
       });
     },
     (error) => {
-      if (error.code === error.PERMISSION_DENIED) {
-        estado.textContent = "Debes permitir el acceso a la ubicación para continuar.";
-      } else {
-        estado.textContent = "No se pudo obtener la ubicación.";
-      }
+      estado.textContent = "No se pudo obtener la ubicación.";
     }
   );
 });
