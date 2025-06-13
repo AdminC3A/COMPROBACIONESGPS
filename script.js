@@ -1,5 +1,6 @@
 const form = document.getElementById("ubicacionForm");
 const estado = document.getElementById("estado");
+const submitBtn = document.getElementById("submitBtn");
 const reenviarBtn = document.getElementById("reenviarBtn");
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token") || "sin-token";
@@ -55,43 +56,35 @@ form.addEventListener("submit", function (e) {
       data.append("tipoRed", tipoRed);
       data.append("userAgent", navigator.userAgent);
 
-      fetch("https://script.google.com/macros/s/AKfycbwBQWL7R22qX1t_J9uSNLeTkSebhOyuqf6CSCrrEojSR57Qry006DkDnTbqdtmdp0S3/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbyYoI2ILMpdONZRdEtdR3REHvpAmVcpjntjuOmMjwYb6rphZb92QQFp-SQhVX_U9zGK/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
         body: data
-      })
-      .then(() => {
-        form.querySelector("button[type='submit']").disabled = true;
-        reenviarBtn.style.display = "inline-block";
-
-        estado.innerHTML = `
-          <div id="datosUbicacion">
-            <b>Ubicación enviada:</b><br>
-            Latitud: ${lat}<br>
-            Longitud: ${lon}<br>
-            Distancia a la obra: ${distancia.toFixed(1)} m<br>
-            En obra: ${enObra}
-          </div>
-        `;
-      })
-      .catch((error) => {
-        estado.textContent = "Error al enviar los datos.";
-        console.error("Error en fetch:", error);
       });
+
+      estado.innerText =
+        "Ubicación enviada:\n" +
+        `Latitud: ${lat}\n` +
+        `Longitud: ${lon}\n` +
+        `Distancia a la obra: ${distancia.toFixed(1)} m\n` +
+        `En obra: ${enObra}`;
+
+      submitBtn.disabled = true;
+      reenviarBtn.style.display = "inline-block";
     },
     (error) => {
-      estado.textContent = "No se pudo obtener la ubicación.";
+      estado.textContent = error.code === error.PERMISSION_DENIED
+        ? "Debes permitir el acceso a la ubicación para continuar."
+        : "No se pudo obtener la ubicación.";
     }
   );
 });
 
 reenviarBtn.addEventListener("click", () => {
-  estado.innerHTML = "";
-  form.style.display = "block";
-  form.querySelector("button[type='submit']").disabled = false;
+  submitBtn.disabled = false;
   reenviarBtn.style.display = "none";
-  form.reset();
+  estado.innerText = "";
 });
