@@ -68,7 +68,7 @@ form.addEventListener("submit", function (e) {
         reenviarBtn.style.display = "inline-block";
 
         estado.innerHTML = `
-          <div id="datosUbicacion" style="color: black; user-select: text;">
+          <div id="datosUbicacion">
             <b>Ubicación enviada:</b><br>
             Latitud: ${lat}<br>
             Longitud: ${lon}<br>
@@ -83,11 +83,7 @@ form.addEventListener("submit", function (e) {
       });
     },
     (error) => {
-      if (error.code === error.PERMISSION_DENIED) {
-        estado.textContent = "Debes permitir el acceso a la ubicación para continuar.";
-      } else {
-        estado.textContent = "No se pudo obtener la ubicación.";
-      }
+      estado.textContent = "No se pudo obtener la ubicación.";
     }
   );
 });
