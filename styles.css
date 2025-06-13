@@ -23,12 +23,15 @@ form {
   box-shadow: 0 0 15px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 label {
-  display: block;
-  margin-top: 15px;
+  align-self: stretch;
   font-weight: bold;
+  margin-top: 10px;
 }
 
 input, select {
@@ -38,8 +41,8 @@ input, select {
   font-size: 15px;
   border-radius: 6px;
   border: 1px solid #ccc;
-  box-sizing: border-box;
   background-color: #eef2fb;
+  box-sizing: border-box;
 }
 
 button {
@@ -62,12 +65,6 @@ button:hover:enabled {
 button:disabled {
   background-color: #aaa;
   cursor: not-allowed;
-}
-
-#reenviarBtn {
-  margin-top: 0; /* evita separación entre botones */
-  background-color: #007bff;
-  border-top: none;
 }
 
 #estado {
