@@ -7,25 +7,35 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Registro de llegada a obra</h1>
-  <form id="ubicacionForm">
-    <input type="hidden" id="token" name="token" />
-    <label>Nombre:<br><input type="text" name="nombre" required /></label><br>
-    <label>Motivo:<br><input type="text" name="motivo" required /></label><br>
-    <label>Selecciona la obra:<br>
-      <select name="obra" required>
+  <main class="form-wrapper">
+    <h1>Registro de llegada a obra</h1>
+    <form id="ubicacionForm" class="form-box">
+      <input type="hidden" id="token" name="token" />
+      <input type="hidden" id="mostrarDebug" value="NO" />
+
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required />
+
+      <label for="motivo">Motivo:</label>
+      <input type="text" id="motivo" name="motivo" required />
+
+      <label for="obra">Selecciona la obra:</label>
+      <select id="obra" name="obra" required>
+        <option value="">--Selecciona una obra--</option>
         <option value="obra1">Quivira - Casa Tres Aguas</option>
         <option value="obra2">Cabo Real</option>
         <option value="obra3">Chileno Lote 23</option>
         <option value="oficina">Oficina Central</option>
       </select>
-    </label><br>
 
-    <button type="submit" id="submitBtn">Enviar ubicación</button>
-    <button type="button" id="reenviarBtn" style="display:none;">¿Volver a enviar?</button>
-  </form>
+      <div class="button-group">
+        <button type="submit" id="submitBtn">Enviar ubicación</button>
+        <button type="button" id="reenviarBtn" style="display:none">¿Volver a enviar?</button>
+      </div>
+    </form>
 
-  <div id="estado"></div>
+    <pre id="estado" class="estado"></pre>
+  </main>
 
   <script src="script.js"></script>
 </body>
